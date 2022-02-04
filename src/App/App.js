@@ -1,23 +1,16 @@
-import React from 'react';
-import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
-} from '@chakra-ui/react';
-import { ColorModeSwitcher } from '../ColorModeSwitcher';
+import { ChakraProvider, theme } from '@chakra-ui/react';
 import Navbar from '../components/Navbar';
 import LandingPage from '../pages/LandingPage';
+import { Route, Routes } from 'react-router-dom';
+import Login from '../components/Login';
 
 function App() {
   return (
     <ChakraProvider theme={theme}>
       <Navbar />
-      <LandingPage />
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+      </Routes>
     </ChakraProvider>
   );
 }
