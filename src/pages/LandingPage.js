@@ -1,26 +1,122 @@
-import { Center, Heading, Image } from '@chakra-ui/react';
+import {
+  Image,
+  Container,
+  Grid,
+  GridItem,
+  Icon,
+  Center,
+  Text,
+  Avatar,
+  Heading,
+} from '@chakra-ui/react';
 import weshoplogo from '../images/weshoplogo.png';
+import background from '../images/e-commerce.jpg';
+import { FiTruck, FiShoppingBag } from 'react-icons/all';
+import Footer from '../components/Footer';
+
 const LandingPage = () => {
   return (
     <>
-      <Center bg="#24a0ed" h="100px" color="white">
-        <Heading>Welcome to our page !</Heading>
-        <Heading marginLeft="4">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="30"
-            height="30"
-            fill="currentColor"
-            className="bi bi-emoji-smile-fill"
-            viewBox="0 0 16 16"
+      <Container
+        maxW="1920px"
+        bgImage={background}
+        bgSize="cover"
+        bgRepeat="no-repeat"
+        h="70vh"
+        color="white"
+      >
+        <Image src={weshoplogo} pt="150px"></Image>
+      </Container>
+      <Grid templateColumns="repeat(2, 1fr)" mt="80px">
+        <GridItem h="300">
+          <Center>
+            <Icon as={FiShoppingBag} w={100} h={100} color="blue.300" />
+          </Center>
+          <Text fontSize="25px" color="black" textAlign="center">
+            Wide variety of products !
+          </Text>
+          <Text
+            fontSize="18px"
+            w="50%"
+            color="black"
+            textAlign="center"
+            mx="auto"
           >
-            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zM4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683zM10 8c-.552 0-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5S10.552 8 10 8z" />
-          </svg>
-        </Heading>
-      </Center>
-      <Center>
-        <Image src={weshoplogo}></Image>
-      </Center>
+            You can basicly find everything you want in WeShop. We have a lot of
+            product categories like Electronics, Clothing, Jewlery etc...!
+          </Text>
+        </GridItem>
+        <GridItem h="300">
+          <Center>
+            <Icon as={FiTruck} w={100} h={100} color="blue.300" />
+          </Center>
+          <Text fontSize="25px" color="black" textAlign="center">
+            Fast transportation!
+          </Text>
+          <Text
+            fontSize="18px"
+            w="50%"
+            color="black"
+            textAlign="center"
+            mx="auto"
+          >
+            WeShop is on of the fastest platforms because it delivers products
+            within 24 hours !
+          </Text>
+        </GridItem>
+      </Grid>
+      <Heading textAlign="center" mb="5">
+        Testimonials
+      </Heading>
+
+      <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+        <GridItem w="100%" h="300" bg="blackAlpha.50">
+          <Center>
+            <Avatar
+              name="Dan Abrahmov"
+              src="https://bit.ly/dan-abramov"
+              size="2xl"
+            />
+          </Center>
+          <Center>
+            <Text fontSize="18px" w="50%" color="black" pt="5">
+              Wow ! WeShop really has everything. I recently bought a new house
+              and i found everything i needed here.
+            </Text>
+          </Center>
+        </GridItem>
+        <GridItem w="100%" h="300" bg="blackAlpha.50">
+          <Center>
+            <Avatar
+              name="Kent Dodds"
+              src="https://bit.ly/kent-c-dodds"
+              size="2xl"
+            />
+          </Center>
+          <Center>
+            <Text fontSize="18px" w="50%" color="black" pt="5">
+              I love the user experience from this website.Everything is so
+              simple and the support is very helpful and kind .
+            </Text>
+          </Center>
+        </GridItem>
+        <GridItem w="100%" h="300" bg="blackAlpha.50">
+          <Center>
+            <Avatar
+              name="Ryan Florence"
+              src="https://bit.ly/ryan-florence"
+              size="2xl"
+            />
+          </Center>
+          <Center>
+            <Text fontSize="18px" w="50%" color="black" pt="5">
+              I was a little sceptical about the transportation but when i got
+              my products i was really happy !
+            </Text>
+          </Center>
+        </GridItem>
+      </Grid>
+      <Footer />
     </>
   );
 };
