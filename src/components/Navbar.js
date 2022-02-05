@@ -32,7 +32,7 @@ const Navbar = () => {
               <Button colorScheme="orange" mr="4">
                 Sign Up
               </Button>
-              <Button colorScheme="orange">Log in</Button>
+              <Login />
             </Box>
           </Flex>
         </Container>
@@ -43,8 +43,3 @@ const Navbar = () => {
 
 export default Navbar;
 
-{
-  /* <NavLink p="2" bgColor="orange" to="/">
-                Log in
-              </NavLink> */
-}
