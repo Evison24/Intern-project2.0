@@ -10,6 +10,7 @@ import {
 import { FcShop } from 'react-icons/all';
 import { NavLink } from 'react-router-dom';
 import Login from './Login';
+import SignUp from './SignUp';
 
 const Navbar = () => {
   return (
@@ -29,9 +30,7 @@ const Navbar = () => {
             </NavLink>
             <Spacer />
             <Box>
-              <Button colorScheme="orange" mr="4">
-                Sign Up
-              </Button>
+              <SignUp />
               <Login />
             </Box>
           </Flex>
@@ -42,4 +41,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

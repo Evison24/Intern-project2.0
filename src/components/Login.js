@@ -13,64 +13,142 @@ import {
   FormHelperText,
   Input,
   Icon,
+  InputGroup,
+  InputRightElement,
+  InputLeftElement,
 } from '@chakra-ui/react';
-import { HiOutlineKey } from 'react-icons/all';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+
+import { HiOutlineKey, FiUser, BiLockAlt } from 'react-icons/all';
+import { useState } from 'react';
+import Axios from '../utils/axios/Axios';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import {
+  onUserLogin,
+  onUserLogout,
+} from '../utils/store/reducers/users/userSlice';
+import TokenManager from '../utils/helpers/TokenManager';
+import useGetUser from '../utils/hooks/useGetUser';
 
 const Login = () => {
+  let user = useGetUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [showPassword, setShowPassword] = useState(false);
+  const [username, setUsername] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [message, setMessage] = useState(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const onLoginButtonClick = async () => {
+    try {
+      const res = await Axios.post('Users/login', { username, password });
+      if (res.status === 200) {
+        dispatch(onUserLogin(res.data.user));
+        TokenManager.setToken(res.data.token);
+        navigate('/', { replace: true });
+        onClose();
+      }
+    } catch {
+      setMessage('Username or password is incorrect !');
+    }
+  };
+
+  const onLogout = () => {
+    dispatch(onUserLogout());
+  };
+
   return (
     <>
-      <Button colorScheme="orange" onClick={onOpen}>
-        Log in
-      </Button>
+      {user ? (
+        <Button colorScheme={'orange'} onClick={() => onLogout()}>
+          Log out
+        </Button>
+      ) : (
+        <Button colorScheme={'orange'} onClick={onOpen}>
+          Log in
+        </Button>
+      )}
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent h={500} bgColor="blackAlpha.800" textColor="white">
+        <ModalContent
+          h={450}
+          bgColor={'blackAlpha.800'}
+          textColor={'white'}
+          onKeyPress={e => {
+            e.key === 'Enter' && onLoginButtonClick();
+          }}
+        >
           <ModalHeader
-            bgColor="orange.400"
-            textAlign="center"
-            textColor="black"
+            bgColor={'orange.400'}
+            textAlign={'center'}
+            textColor={'black'}
             fontSize={30}
           >
             Log in
-            <Icon alignSelf="center" as={HiOutlineKey} w={10} h={7} />
+            <Icon alignSelf={'center'} as={HiOutlineKey} w={10} h={7} />
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody mx={10} mt={5}>
             <FormControl>
-              <Input
-                bgColor="whiteAlpha.300"
-                mt={35}
-                mb={50}
-                placeholder="Username"
-                borderColor="blackAlpha.500"
-                id="username"
-                type="text"
-                fontSize="xl"
-                h={50}
-              />
-              {/* <FormHelperText mb={5}>
-                We'll never share your email.
-              </FormHelperText> */}
+              <InputGroup mt={35}>
+                <InputLeftElement h={'full'} fontSize={25}>
+                  <Icon as={FiUser} />
+                </InputLeftElement>
+                <Input
+                  onChange={e => setUsername(e.target.value)}
+                  bgColor={'whiteAlpha.300'}
+                  placeholder={'Username'}
+                  borderColor={'blackAlpha.500'}
+                  id={'username'}
+                  type={'text'}
+                  fontSize={'xl'}
+                  h={50}
+                />
+              </InputGroup>
+              {message && <FormHelperText>{message}</FormHelperText>}
+            </FormControl>
 
-              <Input
-                bgColor="whiteAlpha.300"
-                placeholder="Password"
-                borderColor="blackAlpha.500"
-                id="password"
-                type="password"
-                fontSize="xl"
-                h={50}
-              />
-              {/* <FormHelperText>
-                Password must be at least 6 charcters !
-              </FormHelperText> */}
+            <FormControl>
+              <InputGroup mt={35}>
+                <InputLeftElement h={'full'} fontSize={25}>
+                  <Icon as={BiLockAlt} />
+                </InputLeftElement>
+                <Input
+                  onChange={e => setPassword(e.target.value)}
+                  placeholder={'Password'}
+                  type={showPassword ? 'text' : 'password'}
+                  bgColor={'whiteAlpha.300'}
+                  borderColor={'blackAlpha.500'}
+                  fontSize={'xl'}
+                  h={50}
+                />
+
+                <InputRightElement h={'full'}>
+                  <Button
+                    _hover={{ bg: 'orange.600' }}
+                    variant={'ghost'}
+                    onClick={() =>
+                      setShowPassword(showPassword => !showPassword)
+                    }
+                  >
+                    {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+              {message && <FormHelperText>{message}</FormHelperText>}
             </FormControl>
           </ModalBody>
 
-          <ModalFooter alignSelf="center">
-            <Button h={50} mt={-250} bgColor="orange.400" textColor="black">
+          <ModalFooter alignSelf={'center'}>
+            <Button
+              onClick={() => onLoginButtonClick()}
+              h={50}
+              bgColor={'orange.400'}
+              textColor={'black'}
+            >
               Log in
             </Button>
           </ModalFooter>
