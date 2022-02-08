@@ -9,7 +9,6 @@ import {
   Button,
   useDisclosure,
   FormControl,
-  FormErrorMessage,
   FormHelperText,
   Input,
   Icon,
@@ -52,11 +51,17 @@ const Login = () => {
       }
     } catch {
       setMessage('Username or password is incorrect !');
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
     }
   };
 
   const onLogout = () => {
     dispatch(onUserLogout());
+    setUsername(null);
+    setPassword(null);
+    setMessage(null);
   };
 
   return (
@@ -148,6 +153,7 @@ const Login = () => {
               h={50}
               bgColor={'orange.400'}
               textColor={'black'}
+              mt={-20}
             >
               Log in
             </Button>

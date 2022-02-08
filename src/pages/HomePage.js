@@ -1,15 +1,11 @@
-// import AdminPage from "./AdminPage";
-// import useGetUser from "../utils/hooks/useGetUser";
+import AdminPage from './AdminPage';
+import useGetUser from '../utils/hooks/useGetUser';
 import UserPage from './UserPage';
 
 const HomePage = () => {
-  //   const user = useGetUser();
+  const user = useGetUser();
 
-  return (
-    <>
-      <UserPage />
-    </>
-  );
+  return <>{user.isAdmin ? <AdminPage /> : <UserPage />}</>;
 };
 
 export default HomePage;
