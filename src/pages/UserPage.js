@@ -21,20 +21,20 @@ const UserPage = () => {
     };
     fetchProducts();
 
-    //   const fetchCart = async () => {
-    //     const resCart = await axios.get(
-    //       `http://localhost:4000/carts/?&userId=${user.id}`
-    //     );
-    //     if (resCart.data && resCart.data.length > 0) {
-    //       handleCartChange(resCart.data[0]);
-    //     }
-    //   };
-    //   fetchCart();
+    const fetchCart = async () => {
+      const resCart = await axios.get(
+        `http://localhost:4000/carts/?&userId=${user.id}`
+      );
+      if (resCart.data && resCart.data.length > 0) {
+        handleCartChange(resCart.data[0]);
+      }
+    };
+    fetchCart();
   }, []);
 
-  // const handleCartChange = newData => {
-  //   dispatch(onCartChange(newData));
-  // };
+  const handleCartChange = newData => {
+    dispatch(onCartChange(newData));
+  };
 
   return (
     <>
@@ -42,7 +42,12 @@ const UserPage = () => {
         <Container maxW={1600} mt={20}>
           <SimpleGrid minChildWidth="330px" spacing={'40px'}>
             {products.map((product, index) => (
-              <ProductCard key={index} data={product} />
+              <ProductCard
+                key={index}
+                data={product}
+                handleCartChange={handleCartChange}
+                cart={cart}
+              />
             ))}
           </SimpleGrid>
         </Container>
