@@ -3,12 +3,16 @@ import { FcShop } from 'react-icons/all';
 import { NavLink } from 'react-router-dom';
 import Login from './Login';
 import SignUp from './SignUp';
+import Cart from './user/Cart';
+import useGetUser from '../utils/hooks/useGetUser';
 
 const Navbar = () => {
+  let user = useGetUser();
+
   return (
     <>
       <Box w={'100%'} maxH={'xs'} bgColor={'black'}>
-        <Container maxW={'container.xl'}>
+        <Container maxW={'1600px'}>
           <Flex align={'center'}>
             <Box p={'2'}>
               <Heading size={'md'} color={'orange'}>
@@ -22,8 +26,8 @@ const Navbar = () => {
             </NavLink>
             <Spacer />
             <Box>
-              <SignUp />
               <Login />
+              {user ? <Cart /> : <SignUp />}
             </Box>
           </Flex>
         </Container>
