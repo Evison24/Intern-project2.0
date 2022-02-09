@@ -1,0 +1,23 @@
+{
+  "carts": [
+    {
+      "userId": 24,
+      "date": "2022-02-09T16:28:45.632Z",
+      "products": [
+        {
+          "productId": 1,
+          "quantity": 3
+        },
+        {
+          "productId": 3,
+          "quantity": 1
+        },
+        {
+          "productId": 14,
+          "quantity": 1
+        }
+      ],
+      "id": 1
+    }
+  ]
+}
