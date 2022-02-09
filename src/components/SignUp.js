@@ -74,10 +74,10 @@ const SignUp = () => {
 
   return (
     <>
-      <Button colorScheme="orange" onClick={onOpen} mr={5}>
+      <Button colorScheme="orange" onClick={onOpen} ml={5}>
         Sign up
       </Button>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
         <ModalOverlay />
         <ModalContent h={650} bgColor="blackAlpha.800" textColor="white">
           <form onSubmit={handleSubmit(onSubmit)}>
