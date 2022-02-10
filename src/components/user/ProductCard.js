@@ -9,22 +9,28 @@ import {
   ButtonGroup,
   IconButton,
   Flex,
+  Button,
 } from '@chakra-ui/react';
+
 import {
   AiOutlinePlusCircle,
   AiOutlineMinusCircle,
   FaCartArrowDown,
+  CgDetailsMore,
 } from 'react-icons/all';
+
 import { useToast } from '@chakra-ui/react';
 import { useState } from 'react';
 import axios from 'axios';
 import useGetUser from '../../utils/hooks/useGetUser';
 
 const ProductCard = ({ data, cart, handleCartChange }) => {
-  const text = `${data.description}`;
+  const text = `${data.title}`;
   const user = useGetUser();
 
   const [counter, setCounter] = useState(0);
+  const [showMore, setShowMore] = useState(false);
+
   const toast = useToast();
   const handleIncrement = () => {
     setCounter(counter + 1);
@@ -99,7 +105,7 @@ const ProductCard = ({ data, cart, handleCartChange }) => {
         <Box
           role={'group'}
           p={6}
-          maxW={'330px'}
+          maxH={'600px'}
           w={'full'}
           bg={useColorModeValue('white', 'gray.800')}
           boxShadow={'2xl'}
@@ -148,7 +154,15 @@ const ProductCard = ({ data, cart, handleCartChange }) => {
               Brand
             </Text>
             <Heading fontSize={'2xl'} fontFamily={'body'} fontWeight={500}>
-              {data.title}
+              {showMore ? `${text}` : `${text.substring(0, 20)}`}
+              <Button
+                variant={'ghost'}
+                icon={<CgDetailsMore />}
+                onClick={() => setShowMore(!showMore)}
+              >
+                {' '}
+                {showMore ? 'Show less' : '...'}{' '}
+              </Button>
             </Heading>
             <Stack direction={'row'} align={'center'}>
               <Text fontWeight={800} fontSize={'xl'}>

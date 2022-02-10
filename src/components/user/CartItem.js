@@ -6,15 +6,22 @@ import {
   Spacer,
   Stack,
   Text,
+  Divider,
+  IconButton,
 } from '@chakra-ui/react';
+
+import { CgDetailsMore, MdRemoveShoppingCart } from 'react-icons/all';
 
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { onCartChange } from '../../utils/store/reducers/carts/cartSlice';
+import { useState } from 'react';
 
 const CartItem = ({ quantity, product }) => {
   const cart = useSelector(state => state.cart);
   const dispatch = useDispatch();
+  const [showMore, setShowMore] = useState(false);
+  const text = `${product.title}`;
 
   return (
     <>
@@ -24,16 +31,24 @@ const CartItem = ({ quantity, product }) => {
           src={product.image}
           alt="product"
           rounded="lg"
-          width="120px"
-          height="180px"
-          fit="cover"
+          maxW="120px"
+          maxH="120px"
+          fit="contain"
           draggable="false"
           mr={5}
         />
         <Box>
           <Stack spacing={0.5}>
             <Text maxW={100} fontWeight="medium">
-              {product.title}
+              {showMore ? `${text}` : `${text.substring(0, 20)}`}
+              <Button
+                variant={'ghost'}
+                icon={<CgDetailsMore />}
+                onClick={() => setShowMore(!showMore)}
+              >
+                {' '}
+                {showMore ? 'Show less' : '...'}{' '}
+              </Button>
             </Text>
             <Text fontSize="sm">Category: {product.category}</Text>
           </Stack>
@@ -43,7 +58,10 @@ const CartItem = ({ quantity, product }) => {
         <Spacer />
         <Box>${quantity * product.price}</Box>
         <Spacer />
-        <Button
+        <IconButton
+          fontSize={25}
+          bgColor={'red.400'}
+          icon={<MdRemoveShoppingCart />}
           onClick={() => {
             const copyCart = JSON.parse(JSON.stringify(cart));
             const index = copyCart.products.findIndex(
@@ -57,8 +75,9 @@ const CartItem = ({ quantity, product }) => {
           }}
         >
           X
-        </Button>
+        </IconButton>
       </Flex>
+      <Divider mt={5} />
     </>
   );
 };

@@ -1,19 +1,12 @@
 {
-  "carts": [
+  "carts": [],
+  "sold": [
     {
       "userId": 24,
-      "date": "2022-02-09T16:28:45.632Z",
+      "date": "2022-02-10T16:46:41.464Z",
       "products": [
         {
-          "productId": 1,
-          "quantity": 3
-        },
-        {
-          "productId": 3,
-          "quantity": 1
-        },
-        {
-          "productId": 14,
+          "productId": 4,
           "quantity": 1
         }
       ],

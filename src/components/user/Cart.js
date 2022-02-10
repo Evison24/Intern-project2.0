@@ -12,12 +12,17 @@ import {
   Flex,
   Box,
   Spacer,
+  Heading,
+  Divider,
+  Text,
+  Center,
 } from '@chakra-ui/react';
 import { TiShoppingCart } from 'react-icons/all';
-import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import CartItem from './CartItem';
+import { onCartChange } from '../../utils/store/reducers/carts/cartSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Cart = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -25,13 +30,14 @@ const Cart = () => {
   const [products, setProducts] = useState(null);
   const [firstLoad, setFirstLoad] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProducts = async () => {
       if (cart && !firstLoad) {
         const copyProducts = [];
         let price = 0;
-        if (cart.products.length > 0) {
+        if (cart.products?.length > 0) {
           for (let i = 0; i < cart.products.length; i++) {
             const respProd = await axios.get(
               `https://fakestoreapi.com/products/${cart.products[i].productId}`
@@ -56,7 +62,7 @@ const Cart = () => {
       if (cart && firstLoad) {
         const newProducts = [];
         let price = 0;
-        if (cart.products.length > 0) {
+        if (cart.products?.length > 0) {
           for (let i = 0; i < cart.products.length; i++) {
             let copyProducts = [...products];
             const foundProduct = copyProducts.find(
@@ -86,9 +92,25 @@ const Cart = () => {
     fetch();
   }, [cart]);
 
+  // get cart
+  // copy cart data
+  // add cart data to sold
+  // delete cart
+
+  const buyProducts = async () => {
+    const soldCart = JSON.parse(JSON.stringify(cart));
+    console.log(soldCart);
+    if (cart.products.length > 0) {
+      await axios.put(`http://localhost:4000/sold/${soldCart.id}`, soldCart);
+      await axios.delete(`http://localhost:4000/carts/${soldCart.id}`);
+
+      dispatch(onCartChange(soldCart));
+    }
+  };
+
   return (
     <>
-      <Button _hover={'none'} bgColor={'black'} onClick={onOpen} ml={5}>
+      <Button variant={'unstyled'} bgColor={'black'} onClick={onOpen} ml={5}>
         {' '}
         <Icon fontSize={35} color={'orange'} as={TiShoppingCart} />
       </Button>
@@ -100,18 +122,19 @@ const Cart = () => {
         onClose={onClose}
         isOpen={isOpen}
         isCentered
+        scrollBehavior={'inside'}
       >
         <ModalOverlay />
-        <ModalContent maxW={1400}>
-          <ModalHeader>
-            Cart
-            {/* Shopping Cart (
-            {products && products.length === 1
-              ? `${products.length} item `
-              : `${products.length} items `}
-            ){' '} */}
+        <ModalContent maxW={1100} maxH={700}>
+          <ModalHeader bgColor={'orange.400'}>
+            Shopping Cart (
+            {products && products?.length === 1
+              ? `${products?.length} item `
+              : `${products?.length} items `}
+            ){' '}
           </ModalHeader>
           <ModalCloseButton />
+          <Divider />
           <ModalBody>
             <Flex>
               <Box w={600}>
@@ -129,7 +152,48 @@ const Cart = () => {
                 })}
               </Box>
               <Spacer />
-              <Box></Box>
+              <Box
+                bgColor={'blackAlpha.50'}
+                mt={7}
+                h={350}
+                w={300}
+                border={'1px'}
+                borderColor={'blackAlpha.300'}
+                borderRadius={'lg'}
+              >
+                <Heading size={'md'} mt={5} ml={5}>
+                  Order Summary
+                </Heading>
+                <Divider mt={5} />
+                <Box maxW={250} mx={'auto'}>
+                  <Flex mt={7} justify={'space-between'}>
+                    <Text fontSize={20}>Products</Text>
+                    <Text fontSize={20}>${totalPrice.toFixed(2)}</Text>
+                  </Flex>
+                  <Flex mt={2} justify={'space-between'}>
+                    <Text fontSize={20}>Shipping</Text>
+                    <Text fontSize={20}>Gratis</Text>
+                  </Flex>
+                  <Divider mt={5} />
+                  <Flex mt={5} justify={'space-between'}>
+                    <Heading size={'sm'} fontSize={20}>
+                      Total amount
+                    </Heading>
+                    <Heading fontSize={20}>${totalPrice.toFixed(2)}</Heading>
+                  </Flex>
+                  <Center>
+                    <Button
+                      onClick={() => buyProducts()}
+                      colorScheme={'orange'}
+                      mx={5}
+                      w={'100%'}
+                      mt={10}
+                    >
+                      Buy
+                    </Button>
+                  </Center>
+                </Box>
+              </Box>
             </Flex>
           </ModalBody>
           <ModalFooter>
