@@ -1,9 +1,8 @@
 {
-  "carts": [],
-  "sold": [
+  "carts": [
     {
       "userId": 24,
-      "date": "2022-02-10T16:46:41.464Z",
+      "date": "2022-02-11T14:55:04.134Z",
       "products": [
         {
           "productId": 4,
@@ -11,6 +10,80 @@
         }
       ],
       "id": 1
+    }
+  ],
+  "sold": [
+    {
+      "userId": 24,
+      "date": "2022-02-11T13:28:17.829Z",
+      "products": [
+        {
+          "productId": 2,
+          "quantity": 4
+        },
+        {
+          "productId": 3,
+          "quantity": 2
+        }
+      ],
+      "totalPrice": 201.18,
+      "id": 1
+    },
+    {
+      "userId": 24,
+      "date": "2022-02-11T14:32:25.657Z",
+      "products": [
+        {
+          "productId": 2,
+          "quantity": 1
+        },
+        {
+          "productId": 3,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 78.29,
+      "id": 2
+    },
+    {
+      "userId": 24,
+      "date": "2022-02-11T14:42:43.667Z",
+      "products": [
+        {
+          "productId": 3,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 55.99,
+      "id": 3
+    },
+    {
+      "userId": 24,
+      "date": "2022-02-11T14:47:15.201Z",
+      "products": [
+        {
+          "productId": 1,
+          "quantity": 2
+        }
+      ],
+      "totalPrice": 219.9,
+      "id": 4
+    },
+    {
+      "userId": 24,
+      "date": "2022-02-11T14:54:50.815Z",
+      "products": [
+        {
+          "productId": 4,
+          "quantity": 2
+        },
+        {
+          "productId": 3,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 87.97,
+      "id": 5
     }
   ]
 }
