@@ -16,6 +16,7 @@ import {
   Divider,
   Text,
   Center,
+  useToast,
 } from '@chakra-ui/react';
 import { TiShoppingCart } from 'react-icons/all';
 import { useState, useEffect } from 'react';
@@ -23,6 +24,7 @@ import axios from 'axios';
 import CartItem from './CartItem';
 import { onCartChange } from '../../utils/store/reducers/carts/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import useGetUser from '../../utils/hooks/useGetUser';
 
 const Cart = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -31,6 +33,8 @@ const Cart = () => {
   const [firstLoad, setFirstLoad] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
   const dispatch = useDispatch();
+  const user = useGetUser();
+  const toast = useToast();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -92,19 +96,27 @@ const Cart = () => {
     fetch();
   }, [cart]);
 
-  // get cart
-  // copy cart data
-  // add cart data to sold
-  // delete cart
-
   const buyProducts = async () => {
-    const soldCart = JSON.parse(JSON.stringify(cart));
-    console.log(soldCart);
-    if (cart.products.length > 0) {
-      await axios.put(`http://localhost:4000/sold/${soldCart.id}`, soldCart);
-      await axios.delete(`http://localhost:4000/carts/${soldCart.id}`);
+    if (cart && cart.products.length > 0) {
+      await axios.post('http://localhost:4000/sold', {
+        userId: user.id,
+        date: new Date(),
+        products: cart.products,
+        totalPrice,
+      });
 
-      dispatch(onCartChange(soldCart));
+      await axios.delete(`http://localhost:4000/carts/${cart.id}`);
+      dispatch(onCartChange(null));
+      setProducts([]);
+      setTotalPrice(0);
+      toast({
+        title: 'Success',
+        description:
+          'Your products will arrive to your address within 24 hours !',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      });
     }
   };
 
@@ -114,93 +126,96 @@ const Cart = () => {
         {' '}
         <Icon fontSize={35} color={'orange'} as={TiShoppingCart} />
       </Button>
-
-      <Modal
-        closeOnOverlayClick={false}
-        size={'xl'}
-        maxW={1600}
-        onClose={onClose}
-        isOpen={isOpen}
-        isCentered
-        scrollBehavior={'inside'}
-      >
-        <ModalOverlay />
-        <ModalContent maxW={1100} maxH={700}>
-          <ModalHeader bgColor={'orange.400'}>
-            Shopping Cart (
-            {products && products?.length === 1
-              ? `${products?.length} item `
-              : `${products?.length} items `}
-            ){' '}
-          </ModalHeader>
-          <ModalCloseButton />
-          <Divider />
-          <ModalBody>
-            <Flex>
-              <Box w={600}>
-                {products?.map((product, index) => {
-                  const productQuantity = cart.products.find(
-                    p => p.productId === product.id
-                  )?.quantity;
-                  return (
-                    <CartItem
-                      product={product}
-                      key={index}
-                      quantity={productQuantity}
-                    />
-                  );
-                })}
-              </Box>
-              <Spacer />
-              <Box
-                bgColor={'blackAlpha.50'}
-                mt={7}
-                h={350}
-                w={300}
-                border={'1px'}
-                borderColor={'blackAlpha.300'}
-                borderRadius={'lg'}
-              >
-                <Heading size={'md'} mt={5} ml={5}>
-                  Order Summary
-                </Heading>
-                <Divider mt={5} />
-                <Box maxW={250} mx={'auto'}>
-                  <Flex mt={7} justify={'space-between'}>
-                    <Text fontSize={20}>Products</Text>
-                    <Text fontSize={20}>${totalPrice.toFixed(2)}</Text>
-                  </Flex>
-                  <Flex mt={2} justify={'space-between'}>
-                    <Text fontSize={20}>Shipping</Text>
-                    <Text fontSize={20}>Gratis</Text>
-                  </Flex>
-                  <Divider mt={5} />
-                  <Flex mt={5} justify={'space-between'}>
-                    <Heading size={'sm'} fontSize={20}>
-                      Total amount
-                    </Heading>
-                    <Heading fontSize={20}>${totalPrice.toFixed(2)}</Heading>
-                  </Flex>
-                  <Center>
-                    <Button
-                      onClick={() => buyProducts()}
-                      colorScheme={'orange'}
-                      mx={5}
-                      w={'100%'}
-                      mt={10}
-                    >
-                      Buy
-                    </Button>
-                  </Center>
+      {cart && products && (
+        <Modal
+          closeOnOverlayClick={false}
+          size={'xl'}
+          maxW={1600}
+          onClose={onClose}
+          isOpen={isOpen}
+          isCentered
+          scrollBehavior={'inside'}
+        >
+          <ModalOverlay />
+          <ModalContent maxW={1100} maxH={700}>
+            <ModalHeader bgColor={'orange.400'}>
+              Shopping Cart (
+              {!products
+                ? '0 items'
+                : products?.length === 1
+                ? `${products?.length} item `
+                : `${products?.length} items `}
+              ){' '}
+            </ModalHeader>
+            <ModalCloseButton />
+            <Divider />
+            <ModalBody>
+              <Flex>
+                <Box w={600}>
+                  {products?.map((product, index) => {
+                    const productQuantity = cart?.products.find(
+                      p => p.productId === product.id
+                    )?.quantity;
+                    return (
+                      <CartItem
+                        product={product}
+                        key={index}
+                        quantity={productQuantity}
+                      />
+                    );
+                  })}
                 </Box>
-              </Box>
-            </Flex>
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+                <Spacer />
+                <Box
+                  bgColor={'blackAlpha.50'}
+                  mt={7}
+                  h={350}
+                  w={300}
+                  border={'1px'}
+                  borderColor={'blackAlpha.300'}
+                  borderRadius={'lg'}
+                >
+                  <Heading size={'md'} mt={5} ml={5}>
+                    Order Summary
+                  </Heading>
+                  <Divider mt={5} />
+                  <Box maxW={250} mx={'auto'}>
+                    <Flex mt={7} justify={'space-between'}>
+                      <Text fontSize={20}>Products</Text>
+                      <Text fontSize={20}>${totalPrice.toFixed(2)}</Text>
+                    </Flex>
+                    <Flex mt={2} justify={'space-between'}>
+                      <Text fontSize={20}>Shipping</Text>
+                      <Text fontSize={20}>Gratis</Text>
+                    </Flex>
+                    <Divider mt={5} />
+                    <Flex mt={5} justify={'space-between'}>
+                      <Heading size={'sm'} fontSize={20}>
+                        Total amount
+                      </Heading>
+                      <Heading fontSize={20}>${totalPrice.toFixed(2)}</Heading>
+                    </Flex>
+                    <Center>
+                      <Button
+                        onClick={() => buyProducts()}
+                        colorScheme={'orange'}
+                        mx={5}
+                        w={'100%'}
+                        mt={10}
+                      >
+                        Buy
+                      </Button>
+                    </Center>
+                  </Box>
+                </Box>
+              </Flex>
+            </ModalBody>
+            <ModalFooter>
+              <Button onClick={onClose}>Close</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      )}
     </>
   );
 };
