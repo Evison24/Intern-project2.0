@@ -5,6 +5,7 @@ import Login from './Login';
 import SignUp from './SignUp';
 import Cart from './user/Cart';
 import useGetUser from '../utils/hooks/useGetUser';
+import ProductsChart from '../components/charts/ProductsChart';
 
 const Navbar = () => {
   let user = useGetUser();
@@ -28,6 +29,7 @@ const Navbar = () => {
             <Box>
               <Login />
               {user ? <Cart /> : <SignUp />}
+              {user ? <ProductsChart /> : ' '}
             </Box>
           </Flex>
         </Container>
