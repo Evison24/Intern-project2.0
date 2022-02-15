@@ -18,18 +18,13 @@ import _ from 'lodash';
 
 const ProductsChart = () => {
   const [soldProducts, setSoldProducts] = useState(null);
-  const [totalProdQuantity, setTotalProdQuantity] = useState(0);
   const [amChartData, setAmChartData] = useState(null);
   const user = useGetUser();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  let series = {
-    name: 'Series',
-    categoryField: 'Product',
-    valueField: 'totalQuantity',
-  };
   let data = [];
+  let chartData = [];
 
   useEffect(() => {
     const fetchSoldProducts = async () => {
@@ -37,37 +32,59 @@ const ProductsChart = () => {
         `http://localhost:4000/sold?userId=${user.id}`
       );
       setSoldProducts(resSoldProd.data);
+      const soldProds = resSoldProd.data;
+      if (soldProds) {
+        for (let i = 0; i < soldProds.length; i++) {
+          for (let j in soldProds[i].products)
+            data.push(soldProds[i].products[j]);
+        }
+      }
+      let groupedByProdId = _.groupBy(data, 'productId');
+      let groupedByProdIdArray = _.values(groupedByProdId);
 
-      // let groupedSoldProducts = _.groupBy(resSoldProd.data, 'id');
-      // console.log(groupedSoldProducts);
+      /* 
+          Get products from FakeStoreAPI
+          Compare the products id with productId from the sold prods array
+          When the id is the same we assign the product title
+          Then we add prodTitle to chartData as the first data type
+      */
 
-      debugger;
+      chartData = groupedByProdIdArray.map(currVal => {
+        return {
+          productId: currVal[0].productId,
+          quantity: currVal.reduce(
+            (previousValue, currentValue) =>
+              previousValue + currentValue.quantity,
+            0
+          ),
+        };
+      });
 
-      //TODO access productId in all the objects in sold table
-
-      setAmChartData(data);
+      setAmChartData(chartData);
     };
+
     fetchSoldProducts();
   }, []);
-
-  if (resSoldProd.data) {
-    for (let i = 0; i < resSoldProd.data.length; i++) {
-      for (let j in resSoldProd.data?.products) {
-        let x = resSoldProd.data?.products[j];
-        console.log(x);
-      }
-    }
-  }
+  let series = {
+    name: 'Series',
+    categoryField: 'productId',
+    valueField: 'quantity',
+  };
   return (
     <>
       <Button ml={5} colorScheme={'orange'} onClick={onOpen}>
         PieChart
       </Button>
-
-      <Modal onClose={onClose} isOpen={isOpen} isCentered>
+      <Modal
+        size={'xl'}
+        onClose={onClose}
+        isOpen={isOpen}
+        isCentered
+        closeOnOverlayClick={false}
+      >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>
+          <ModalHeader bgColor={'blackAlpha.50'}>
             This chart shows how many times each product is purchased !
           </ModalHeader>
           <ModalCloseButton />
