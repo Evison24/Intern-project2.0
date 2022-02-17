@@ -1,37 +1,30 @@
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 import PieChart from './PieChart';
 import useGetUser from '../../utils/hooks/useGetUser';
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  Button,
-} from '@chakra-ui/react';
-import { FcShop } from 'react-icons/all';
+import { Center } from '@chakra-ui/react';
 import _ from 'lodash';
 
 const ProductsChart = () => {
-  const [soldProducts, setSoldProducts] = useState(null);
   const [amChartData, setAmChartData] = useState(null);
   const user = useGetUser();
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const products = useSelector(state => state.products);
 
   let data = [];
   let chartData = [];
-
+  const titleVal = productId => {
+    return products.map(product => {
+      if (product.id === productId) {
+        return product.title.slice(0, 20);
+      }
+    });
+  };
   useEffect(() => {
     const fetchSoldProducts = async () => {
       const resSoldProd = await axios.get(
         `http://localhost:4000/sold?userId=${user.id}`
       );
-      setSoldProducts(resSoldProd.data);
       const soldProds = resSoldProd.data;
       if (soldProds) {
         for (let i = 0; i < soldProds.length; i++) {
@@ -41,16 +34,10 @@ const ProductsChart = () => {
       }
       let groupedByProdId = _.groupBy(data, 'productId');
       let groupedByProdIdArray = _.values(groupedByProdId);
-
-      /* 
-          Get products from FakeStoreAPI
-          Compare the products id with productId from the sold prods array
-          When the id is the same we assign the product title
-          Then we add prodTitle to chartData as the first data type
-      */
-
+      console.log(groupedByProdIdArray);
       chartData = groupedByProdIdArray.map(currVal => {
         return {
+          title: titleVal(currVal[0].productId),
           productId: currVal[0].productId,
           quantity: currVal.reduce(
             (previousValue, currentValue) =>
@@ -60,44 +47,23 @@ const ProductsChart = () => {
         };
       });
 
+      console.log(chartData);
       setAmChartData(chartData);
     };
 
     fetchSoldProducts();
   }, []);
+
   let series = {
     name: 'Series',
-    categoryField: 'productId',
+    categoryField: 'title',
     valueField: 'quantity',
   };
   return (
     <>
-      <Button ml={5} colorScheme={'orange'} onClick={onOpen}>
-        PieChart
-      </Button>
-      <Modal
-        size={'xl'}
-        onClose={onClose}
-        isOpen={isOpen}
-        isCentered
-        closeOnOverlayClick={false}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader bgColor={'blackAlpha.50'}>
-            This chart shows how many times each product is purchased !
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            {amChartData && (
-              <PieChart data={amChartData} chartSeries={series} />
-            )}
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <Center>
+        {amChartData && <PieChart data={amChartData} chartSeries={series} />}
+      </Center>
     </>
   );
 };

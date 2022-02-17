@@ -4,6 +4,7 @@ import LandingPage from '../pages/LandingPage';
 import HomePage from '../pages/HomePage';
 import { Route, Routes } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
+import ProductsChart from '../components/charts/ProductsChart';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           }
         />
         <Route path="/landing" element={<LandingPage />} />
+        <Route path="/user-chart" element={<ProductsChart />} />
       </Routes>
     </ChakraProvider>
   );

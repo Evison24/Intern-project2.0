@@ -2,14 +2,15 @@ import { Center, Container, SimpleGrid, Spinner } from '@chakra-ui/react';
 import ProductCard from '../components/user/ProductCard';
 
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Footer from '../components/Footer';
 import useGetUser from '../utils/hooks/useGetUser';
 import { useDispatch, useSelector } from 'react-redux';
 import { onCartChange } from '../utils/store/reducers/carts/cartSlice';
+import { onProductsFetch } from '../utils/store/reducers/products/productsSlice';
 
 const UserPage = () => {
-  const [products, setProducts] = useState(null);
+  const products = useSelector(state => state.products);
   const cart = useSelector(state => state.cart);
   const user = useGetUser();
   const dispatch = useDispatch();
@@ -17,7 +18,9 @@ const UserPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       const productsRes = await axios.get('https://fakestoreapi.com/products');
-      setProducts(productsRes.data);
+      if (productsRes && productsRes.data) {
+        dispatch(onProductsFetch(productsRes.data));
+      }
     };
     fetchProducts();
 

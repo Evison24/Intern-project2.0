@@ -24,14 +24,14 @@ const PieChart = ({ data, chartSeries }) => {
       am5.Legend.new(root, {
         centerX: am5.percent(50),
         x: am5.percent(50),
-        layout: root.horizontalLayout,
+        layout: root.verticalLayout,
       })
     );
 
     legend.data.setAll(series.dataItems);
   });
 
-  return <div id="chartdiv" style={{ width: '500px', height: '500px' }}></div>;
+  return <div id="chartdiv" style={{ width: '100%', height: '700px' }}></div>;
 };
 
 export default PieChart;

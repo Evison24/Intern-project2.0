@@ -168,12 +168,13 @@ const Cart = () => {
                 <Spacer />
                 <Box
                   bgColor={'blackAlpha.50'}
-                  mt={7}
+                  top={7}
                   h={350}
                   w={300}
                   border={'1px'}
                   borderColor={'blackAlpha.300'}
                   borderRadius={'lg'}
+                  position={'sticky'}
                 >
                   <Heading size={'md'} mt={5} ml={5}>
                     Order Summary

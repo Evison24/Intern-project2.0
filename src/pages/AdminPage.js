@@ -1,10 +1,11 @@
 import { Heading } from '@chakra-ui/react';
-import React from 'react';
+import XYusersChart from '../components/charts/XYusersChart';
 
 const AdminPage = () => {
   return (
     <>
-      <Heading>Welcome Admin ! </Heading>
+      <Heading textAlign="center">Welcome Admin !</Heading>
+      <XYusersChart />
     </>
   );
 };
