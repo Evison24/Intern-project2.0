@@ -42,14 +42,22 @@ const Navbar = () => {
             <Spacer />
             <Box>
               <Login />
-              {user ? <Cart /> : <SignUp />}
+              {!user && <SignUp />}
+              {user?.isAdmin === false ? <Cart /> : ''}
 
-              {user ? (
+              {user?.isAdmin === false ? (
                 <Button ml={5} colorScheme={'orange'}>
                   <NavLink to={'/user-chart'}>User Chart</NavLink>
                 </Button>
               ) : (
                 ' '
+              )}
+              {user?.isAdmin ? (
+                <Button ml={5} colorScheme={'orange'}>
+                  <NavLink to={'/all-users-chart'}>All users XYChart</NavLink>
+                </Button>
+              ) : (
+                ''
               )}
             </Box>
           </Flex>

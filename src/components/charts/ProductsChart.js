@@ -14,11 +14,7 @@ const ProductsChart = () => {
   let data = [];
   let chartData = [];
   const titleVal = productId => {
-    return products.map(product => {
-      if (product.id === productId) {
-        return product.title.slice(0, 20);
-      }
-    });
+    return products.find(p => p.id === productId)?.title?.slice(0, 20);
   };
   useEffect(() => {
     const fetchSoldProducts = async () => {

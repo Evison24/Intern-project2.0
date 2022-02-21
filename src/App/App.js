@@ -5,6 +5,7 @@ import HomePage from '../pages/HomePage';
 import { Route, Routes } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 import ProductsChart from '../components/charts/ProductsChart';
+import XYusersChart from '../components/charts/XYusersChart';
 
 function App() {
   return (
@@ -20,7 +21,22 @@ function App() {
           }
         />
         <Route path="/landing" element={<LandingPage />} />
-        <Route path="/user-chart" element={<ProductsChart />} />
+        <Route
+          path="/user-chart"
+          element={
+            <PrivateRoute>
+              <ProductsChart />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/all-users-chart"
+          element={
+            <PrivateRoute>
+              <XYusersChart />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </ChakraProvider>
   );
