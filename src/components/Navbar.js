@@ -6,6 +6,7 @@ import {
   Container,
   Icon,
   Button,
+  Tooltip,
 } from '@chakra-ui/react';
 import { FcShop } from 'react-icons/all';
 import { NavLink } from 'react-router-dom';
@@ -13,9 +14,12 @@ import Login from './Login';
 import SignUp from './SignUp';
 import Cart from './user/Cart';
 import useGetUser from '../utils/hooks/useGetUser';
-
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
 const Navbar = () => {
   let user = useGetUser();
+  const cart = useSelector(state => state.cart);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   return (
     <>
@@ -43,8 +47,14 @@ const Navbar = () => {
             <Box>
               <Login />
               {!user && <SignUp />}
-              {user?.isAdmin === false ? <Cart /> : ''}
 
+              {user?.isAdmin === false && cart?.products.length > 0 ? (
+                <Cart />
+              ) : user?.isAdmin === false && cart?.products.length < 0 ? (
+                setIsDisabled(true) && <Cart isDisabledCheck={isDisabled} />
+              ) : (
+                ' '
+              )}
               {user?.isAdmin === false ? (
                 <Button ml={5} colorScheme={'orange'}>
                   <NavLink to={'/user-chart'}>User Chart</NavLink>
