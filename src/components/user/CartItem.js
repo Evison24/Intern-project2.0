@@ -22,7 +22,6 @@ const CartItem = ({ quantity, product }) => {
   const dispatch = useDispatch();
   const [showMore, setShowMore] = useState(false);
   const text = `${product.title}`;
-
   return (
     <>
       <Flex align={'center'} mt={7}>
@@ -58,6 +57,7 @@ const CartItem = ({ quantity, product }) => {
         <Spacer />
         <Box>${quantity * product.price}</Box>
         <Spacer />
+
         <IconButton
           fontSize={25}
           bgColor={'red.400'}
