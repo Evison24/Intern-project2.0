@@ -6,6 +6,7 @@ import useAsyncEffect from 'use-async-effect';
 import axios from 'axios';
 import Axios from '../../utils/axios/Axios';
 import _ from 'lodash';
+import { Heading } from '@chakra-ui/react';
 
 const XYusersChart = () => {
   const getUserName = (userId, users) => {
@@ -29,12 +30,12 @@ const XYusersChart = () => {
         ),
       };
     });
-    console.log(chartData);
 
     let root = am5.Root.new('xychartdiv');
     let chart = root.container.children.push(
       am5xy.XYChart.new(root, {
         panY: false,
+        wheelY: 'zoomX',
         layout: root.verticalLayout,
       })
     );
@@ -68,15 +69,20 @@ const XYusersChart = () => {
   }, []);
 
   return (
-    <div
-      id="xychartdiv"
-      style={{
-        width: '800px',
-        height: '500px',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-      }}
-    ></div>
+    <>
+      <Heading size={'lg'} textAlign={'center'} my={5}>
+        This chart shows how much dollars each user has spent.
+      </Heading>
+      <div
+        id="xychartdiv"
+        style={{
+          width: '800px',
+          height: '500px',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+        }}
+      ></div>
+    </>
   );
 };
 
