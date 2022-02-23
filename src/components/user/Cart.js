@@ -17,6 +17,8 @@ import {
   Text,
   Center,
   useToast,
+  Tooltip,
+  Spinner,
 } from '@chakra-ui/react';
 import { TiShoppingCart } from 'react-icons/all';
 import { useState, useEffect } from 'react';
@@ -26,7 +28,7 @@ import { onCartChange } from '../../utils/store/reducers/carts/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import useGetUser from '../../utils/hooks/useGetUser';
 
-const Cart = ({ isDisabledCheck }) => {
+const Cart = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cart = useSelector(state => state.cart);
   const products = useSelector(state => state.products);
@@ -48,7 +50,7 @@ const Cart = ({ isDisabledCheck }) => {
     });
     setCartProducts(cProducts);
     setTotalPrice(tPrice);
-  }, [cart]);
+  }, [cart, products]);
 
   const buyProducts = async () => {
     if (cart && cart.products.length > 0) {
@@ -75,16 +77,29 @@ const Cart = ({ isDisabledCheck }) => {
 
   return (
     <>
-      <Button
-        isDisabled={isDisabledCheck}
-        variant={'unstyled'}
-        bgColor={'black'}
-        onClick={onOpen}
-        ml={5}
-      >
-        {' '}
-        <Icon fontSize={35} color={'orange'} as={TiShoppingCart} />
-      </Button>
+      {cart?.products.length > 0 ? (
+        <Button variant={'unstyled'} bgColor={'black'} onClick={onOpen} ml={5}>
+          {' '}
+          <Icon fontSize={35} color={'orange'} as={TiShoppingCart} />
+        </Button>
+      ) : (
+        <Tooltip
+          label="You don't have any products in your cart !"
+          aria-label="A tooltip"
+        >
+          <Box>
+            <Button
+              isDisabled
+              variant={'unstyled'}
+              bgColor={'black'}
+              onClick={onOpen}
+            >
+              {' '}
+              <Icon fontSize={35} color={'orange'} as={TiShoppingCart} />
+            </Button>
+          </Box>
+        </Tooltip>
+      )}
 
       <Modal
         closeOnOverlayClick={false}
@@ -111,15 +126,26 @@ const Cart = ({ isDisabledCheck }) => {
           <ModalBody>
             <Flex>
               <Box w={600}>
-                {cartProducts?.map((cp, index) => (
-                  <CartItem
-                    product={cp}
-                    key={index}
-                    quantity={
-                      cart?.products.find(p => p.productId === cp.id)?.quantity
-                    }
+                {cartProducts ? (
+                  cartProducts.map((cp, index) => (
+                    <CartItem
+                      product={cp}
+                      key={index}
+                      quantity={
+                        cart?.products.find(p => p.productId === cp.id)
+                          ?.quantity
+                      }
+                    />
+                  ))
+                ) : (
+                  <Spinner
+                    thickness="4px"
+                    speed="0.65s"
+                    emptyColor="gray.200"
+                    color="orange.500"
+                    size="xl"
                   />
-                ))}
+                )}
               </Box>
               <Spacer />
               <Box

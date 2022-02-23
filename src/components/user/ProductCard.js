@@ -143,6 +143,7 @@ const ProductCard = ({ data, cart, handleCartChange }) => {
               width={225}
               objectFit="fill"
               src={data.image}
+              draggable={'false'}
             />
           </Box>
           <Stack pt={10} align={'center'}>

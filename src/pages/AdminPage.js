@@ -1,5 +1,4 @@
 import {
-  Heading,
   Table,
   Thead,
   Tbody,
@@ -18,18 +17,30 @@ import {
   Button,
   useToast,
   Container,
+  Box,
+  Flex,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import Axios from '../utils/axios/Axios';
 import AdminAddUser from '../components/admin/AdminAddUser';
+import EditUser from '../components/admin/EditUser';
 import { MdDeleteForever } from 'react-icons/all';
 
 const AdminPage = () => {
   const [users, setUsers] = useState(null);
   const [userToDelete, setUserToDelete] = useState(null);
+  const [userToEdit, setUserToEdit] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const toast = useToast();
+
+  const onUserEdit = userId => {
+    const selectedUser = users.find(user => user.id === userId);
+    setUserToEdit(selectedUser);
+  };
+
+  const resetUserToEdit = () => {
+    setUserToEdit(null);
+  };
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -41,24 +52,26 @@ const AdminPage = () => {
 
   return (
     <>
-      <Heading textAlign="center">Welcome Admin !</Heading>
-      <AdminAddUser setUsers={setUsers} />
-
       <Container maxW={1500} mb={20}>
         <Table
+          borderRadius={'20px'}
+          overflow={'hidden'}
           mx={'auto'}
           mt={10}
           variant="simple"
-          bgColor={'blackAlpha.50'}
+          bgColor={'blackAlpha.200'}
           colorScheme={'blackAlpha'}
         >
-          <Thead>
+          <Thead bgColor={'orange.400'}>
             <Tr>
-              <Th>#</Th>
-              <Th>Username</Th>
-              <Th>First Name</Th>
-              <Th>Last Name</Th>
-              <Th>Email</Th>
+              <Th fontSize={15}>#</Th>
+              <Th fontSize={15}>Username</Th>
+              <Th fontSize={15}>First Name</Th>
+              <Th fontSize={15}>Last Name</Th>
+              <Th fontSize={15}>Email</Th>
+              <Th fontSize={15}>
+                <AdminAddUser setUsers={setUsers} />
+              </Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -70,16 +83,32 @@ const AdminPage = () => {
                 <Td>{user.surname}</Td>
                 <Td>{user.email}</Td>
                 <Td>
-                  <IconButton
-                    aria-label="Search database"
-                    colorScheme={'red'}
-                    icon={<MdDeleteForever />}
-                    fontSize={30}
-                    onClick={() => {
-                      setUserToDelete(user.id);
-                      onOpen();
-                    }}
-                  />
+                  <Flex>
+                    <Box
+                      onClick={() => {
+                        onUserEdit(user.id);
+                      }}
+                    >
+                      <EditUser
+                        userInfo={userToEdit}
+                        setUsers={setUsers}
+                        resetUserToEdit={resetUserToEdit}
+                      />
+                    </Box>
+                    <Box>
+                      <IconButton
+                        ml={'60px'}
+                        aria-label="Delete"
+                        colorScheme={'red'}
+                        icon={<MdDeleteForever />}
+                        fontSize={30}
+                        onClick={() => {
+                          setUserToDelete(user.id);
+                          onOpen();
+                        }}
+                      />
+                    </Box>
+                  </Flex>
                 </Td>
               </Tr>
             ))}

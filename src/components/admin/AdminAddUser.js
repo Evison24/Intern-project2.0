@@ -15,14 +15,14 @@ import {
   InputGroup,
   InputRightElement,
   FormHelperText,
-  Center,
 } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
 import Axios from '../../utils/axios/Axios';
-import { AddIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { IoMdPersonAdd } from 'react-icons/all';
 
 const AdminAddUser = ({ setUsers }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -75,11 +75,13 @@ const AdminAddUser = ({ setUsers }) => {
 
   return (
     <>
-      <Center mt={5}>
-        <Button leftIcon={<AddIcon />} colorScheme={'orange'} onClick={onOpen}>
-          Create user
-        </Button>
-      </Center>
+      <Button
+        leftIcon={<IoMdPersonAdd fontSize={25} />}
+        bgColor={'orange.400'}
+        onClick={onOpen}
+      >
+        Create user
+      </Button>
       <Drawer
         isOpen={isOpen}
         placement="right"
@@ -89,7 +91,7 @@ const AdminAddUser = ({ setUsers }) => {
         closeOnOverlayClick={false}
       >
         <DrawerOverlay />
-        <DrawerContent bgColor={'black'}>
+        <DrawerContent bgColor={'whiteAlpha'}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <DrawerCloseButton />
             <DrawerHeader bgColor={'orange.400'}>

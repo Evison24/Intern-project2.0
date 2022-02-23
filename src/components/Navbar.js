@@ -2,11 +2,10 @@ import {
   Flex,
   Spacer,
   Box,
-  Heading,
   Container,
   Icon,
   Button,
-  Tooltip,
+  Image,
 } from '@chakra-ui/react';
 import { FcShop } from 'react-icons/all';
 import { NavLink } from 'react-router-dom';
@@ -14,12 +13,10 @@ import Login from './Login';
 import SignUp from './SignUp';
 import Cart from './user/Cart';
 import useGetUser from '../utils/hooks/useGetUser';
-import { useSelector } from 'react-redux';
-import { useState } from 'react';
+import weshoplogo from '../images/weshoplogo.png';
+
 const Navbar = () => {
   let user = useGetUser();
-  const cart = useSelector(state => state.cart);
-  const [isDisabled, setIsDisabled] = useState(false);
 
   return (
     <>
@@ -33,28 +30,21 @@ const Navbar = () => {
       >
         <Container maxW={'1600px'}>
           <Flex align={'center'}>
-            <Box p={'2'}>
-              <Heading size={'md'} color={'orange'}>
+            <Box mr={-7} mt={'5px'}>
+              <NavLink to={user ? '/' : '/landing'}>
                 <Icon as={FcShop} w={8} h={8} />
-              </Heading>
+              </NavLink>
             </Box>
-            <NavLink p={'2'} to={'/'}>
-              <Heading size={'md'} color={'orange'}>
-                WeShop
-              </Heading>
-            </NavLink>
-            <Spacer />
             <Box>
-              <Login />
-              {!user && <SignUp />}
+              <NavLink to={user ? '/' : '/landing'}>
+                <Image src={weshoplogo} h={100} my={-25} />
+              </NavLink>
+            </Box>
 
-              {user?.isAdmin === false && cart?.products.length > 0 ? (
-                <Cart />
-              ) : user?.isAdmin === false && cart?.products.length < 0 ? (
-                setIsDisabled(true) && <Cart isDisabledCheck={isDisabled} />
-              ) : (
-                ' '
-              )}
+            <Spacer />
+            {user?.isAdmin === false && <Cart />}
+            <Box>
+              {!user && <SignUp />}
               {user?.isAdmin === false ? (
                 <Button ml={5} colorScheme={'orange'}>
                   <NavLink to={'/user-chart'}>User Chart</NavLink>
@@ -69,6 +59,7 @@ const Navbar = () => {
               ) : (
                 ''
               )}
+              <Login />
             </Box>
           </Flex>
         </Container>

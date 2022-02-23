@@ -1,5 +1,17 @@
 {
-  "carts": [],
+  "carts": [
+    {
+      "userId": 24,
+      "date": "2022-02-23T11:19:35.371Z",
+      "products": [
+        {
+          "productId": 2,
+          "quantity": 1
+        }
+      ],
+      "id": 1
+    }
+  ],
   "sold": [
     {
       "userId": 24,
@@ -292,6 +304,18 @@
       ],
       "totalPrice": 289.90000000000003,
       "id": 16
+    },
+    {
+      "userId": 24,
+      "date": "2022-02-23T11:19:25.914Z",
+      "products": [
+        {
+          "productId": 3,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 0,
+      "id": 17
     }
   ]
 }

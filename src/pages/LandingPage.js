@@ -1,5 +1,4 @@
 import {
-  Image,
   Container,
   Grid,
   GridItem,
@@ -9,7 +8,6 @@ import {
   Avatar,
   Heading,
 } from '@chakra-ui/react';
-import weshoplogo from '../images/weshoplogo.png';
 import background from '../images/e-commerce.jpg';
 import { FiTruck, FiShoppingBag } from 'react-icons/all';
 import Footer from '../components/Footer';
@@ -24,9 +22,7 @@ const LandingPage = () => {
         bgRepeat="no-repeat"
         h="70vh"
         color="white"
-      >
-        <Image src={weshoplogo} pt="150px"></Image>
-      </Container>
+      ></Container>
       <Grid templateColumns="repeat(2, 1fr)" mt="80px">
         <GridItem h="300">
           <Center>

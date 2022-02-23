@@ -67,11 +67,11 @@ const Login = () => {
   return (
     <>
       {user ? (
-        <Button colorScheme={'orange'} onClick={() => onLogout()}>
+        <Button ml={5} colorScheme={'orange'} onClick={() => onLogout()}>
           Log out
         </Button>
       ) : (
-        <Button colorScheme={'orange'} onClick={onOpen}>
+        <Button ml={5} colorScheme={'orange'} onClick={onOpen}>
           Log in
         </Button>
       )}
