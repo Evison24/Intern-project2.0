@@ -11,7 +11,7 @@ import { FcShop } from 'react-icons/all';
 import { NavLink } from 'react-router-dom';
 import Login from './Login';
 import SignUp from './SignUp';
-import Cart from './user/Cart';
+import Cart from './user/cart/Cart';
 import useGetUser from '../utils/hooks/useGetUser';
 import weshoplogo from '../images/weshoplogo.png';
 
@@ -48,6 +48,13 @@ const Navbar = () => {
               {user?.isAdmin === false ? (
                 <Button ml={5} colorScheme={'orange'}>
                   <NavLink to={'/user-chart'}>User Chart</NavLink>
+                </Button>
+              ) : (
+                ' '
+              )}
+              {user?.isAdmin === false ? (
+                <Button ml={5} colorScheme={'orange'}>
+                  <NavLink to={'/my-profile'}>My profile</NavLink>
                 </Button>
               ) : (
                 ' '

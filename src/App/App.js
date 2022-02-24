@@ -6,6 +6,7 @@ import { Route, Routes } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 import ProductsChart from '../components/charts/ProductsChart';
 import XYusersChart from '../components/charts/XYusersChart';
+import UserProfile from '../components/user/profile/UserProfile';
 
 function App() {
   return (
@@ -34,6 +35,14 @@ function App() {
           element={
             <PrivateRoute>
               <XYusersChart />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/my-profile"
+          element={
+            <PrivateRoute>
+              <UserProfile />
             </PrivateRoute>
           }
         />

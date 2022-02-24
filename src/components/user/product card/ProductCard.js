@@ -22,7 +22,7 @@ import {
 import { useToast } from '@chakra-ui/react';
 import { useState } from 'react';
 import axios from 'axios';
-import useGetUser from '../../utils/hooks/useGetUser';
+import useGetUser from '../../../utils/hooks/useGetUser';
 
 const ProductCard = ({ data, cart, handleCartChange }) => {
   const text = `${data.title}`;

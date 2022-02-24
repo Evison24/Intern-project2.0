@@ -136,7 +136,6 @@ const EditUser = ({ setUsers, userInfo, resetUserToEdit }) => {
                 mr={3}
                 onClick={() => {
                   onClose();
-                  //   resetUserToEdit();
                   reset();
                 }}
               >

@@ -1,5 +1,5 @@
 import { Center, Container, SimpleGrid, Spinner } from '@chakra-ui/react';
-import ProductCard from '../components/user/ProductCard';
+import ProductCard from '../components/user/product card/ProductCard';
 
 import axios from 'axios';
 import { useEffect } from 'react';

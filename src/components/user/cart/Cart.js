@@ -24,9 +24,9 @@ import { TiShoppingCart } from 'react-icons/all';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import CartItem from './CartItem';
-import { onCartChange } from '../../utils/store/reducers/carts/cartSlice';
+import { onCartChange } from '../../../utils/store/reducers/carts/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import useGetUser from '../../utils/hooks/useGetUser';
+import useGetUser from '../../../utils/hooks/useGetUser';
 
 const Cart = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();

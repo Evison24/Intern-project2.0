@@ -14,7 +14,7 @@ import { CgDetailsMore, MdRemoveShoppingCart } from 'react-icons/all';
 
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { onCartChange } from '../../utils/store/reducers/carts/cartSlice';
+import { onCartChange } from '../../../utils/store/reducers/carts/cartSlice';
 import { useState } from 'react';
 
 const CartItem = ({ quantity, product }) => {
