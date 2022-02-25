@@ -14,35 +14,44 @@ import {
   InputGroup,
   InputRightElement,
   FormHelperText,
+  useToast,
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 
-const ChangePassword = ({ onSubmit, user }) => {
+import Axios from '../../../utils/axios/Axios';
+
+const ChangePassword = ({ user }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [oldPasswordCheck, setOldPasswordCheck] = useState(null);
+  const [oldPasswordCheck, setOldPasswordCheck] = useState('');
+  const [newPasswordCheck, setNewPasswordCheck] = useState('');
+  const [confirmNewPasswordCheck, setConfirmNewPasswordCheck] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const toast = useToast();
 
-  const validationSchema = Yup.object().shape({
-    password: Yup.string()
-      .required('Password is required !')
-      .min(6, 'Password must be at least 6 characters'),
-    confirmPassword: Yup.string()
-      .required('Confirm Password is required !')
-      .oneOf([Yup.ref('password')], 'Passwords must match'),
-  });
+  const { register, reset, handleSubmit } = useForm();
 
-  const formOptions = { resolver: yupResolver(validationSchema) };
-
-  const {
-    register,
-    reset,
-    handleSubmit,
-    formState: { errors },
-  } = useForm(formOptions);
+  const onSubmit = async data => {
+    const resp = await Axios.put(`Users/${user.id}`, {
+      ...user,
+      ...data,
+    });
+    if (resp.status === 200) {
+      toast({
+        title: 'Success.',
+        description: 'Password was changed successfully !',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+      onClose();
+      reset();
+      setOldPasswordCheck('');
+      setNewPasswordCheck('');
+      setConfirmNewPasswordCheck('');
+    }
+  };
 
   return (
     <>
@@ -53,10 +62,17 @@ const ChangePassword = ({ onSubmit, user }) => {
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader bgColor={'teal.400'}>Change password</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <ModalHeader bgColor={'teal.400'}>Change password</ModalHeader>
+            <ModalCloseButton
+              onClick={() => {
+                reset();
+                setOldPasswordCheck('');
+                setNewPasswordCheck('');
+                setConfirmNewPasswordCheck('');
+              }}
+            />
+            <ModalBody>
               <FormControl my={5} isRequired>
                 <FormLabel htmlFor="old-password">Old password</FormLabel>
                 <InputGroup>
@@ -79,50 +95,82 @@ const ChangePassword = ({ onSubmit, user }) => {
                   </InputRightElement>
                 </InputGroup>
                 <FormHelperText>
-                  {oldPasswordCheck === user.password
-                    ? 'Passwords match'
-                    : 'Passwords must match !'}
+                  {oldPasswordCheck === user.password &&
+                  oldPasswordCheck !== ' '
+                    ? 'Old password is correct.'
+                    : ''}
                 </FormHelperText>
               </FormControl>
+
               <FormControl mb={5}>
                 <FormLabel htmlFor="new-password">New password</FormLabel>
                 <Input
                   id="new-password"
                   type={showPassword ? 'text' : 'password'}
-                  {...register('password', { required: true })}
+                  {...register('password', {
+                    onChange: e => setNewPasswordCheck(e.target.value),
+                    min: 6,
+                    required: true,
+                  })}
                 />
                 <FormHelperText color={'red.400'}>
-                  {errors.password?.message}
+                  {newPasswordCheck === user.password &&
+                    'Please use a different password than your old password !'}
                 </FormHelperText>
               </FormControl>
+
               <FormControl mb={5}>
                 <FormLabel htmlFor="confirm-new-password">
-                  Old password
+                  Confirm new password
                 </FormLabel>
                 <Input
                   id="confirm-new-password"
                   type={showPassword ? 'text' : 'password'}
-                  {...register('confirmPassword', { required: true })}
+                  {...register('confirmPassword', {
+                    onChange: e => setConfirmNewPasswordCheck(e.target.value),
+                    required: true,
+                  })}
                 />
-                <FormHelperText color={'red.400'}>
-                  {errors.confirmPassword?.message}
+                <FormHelperText>
+                  {confirmNewPasswordCheck === newPasswordCheck &&
+                  confirmNewPasswordCheck !== '' &&
+                  newPasswordCheck !== user.password
+                    ? 'Passwords match !'
+                    : ' '}
                 </FormHelperText>
               </FormControl>
-            </form>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              onClick={() => {
-                onClose();
-                reset();
-              }}
-            >
-              Close
-            </Button>
-            <Button colorScheme={'teal'} ml={'10px'} type="submit">
-              Save
-            </Button>
-          </ModalFooter>
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                onClick={() => {
+                  onClose();
+                  reset();
+                  setOldPasswordCheck('');
+                  setNewPasswordCheck('');
+                  setConfirmNewPasswordCheck('');
+                }}
+              >
+                Close
+              </Button>
+              {oldPasswordCheck === user.password &&
+              newPasswordCheck !== '' &&
+              newPasswordCheck !== user.password &&
+              newPasswordCheck === confirmNewPasswordCheck ? (
+                <Button colorScheme={'teal'} ml={'10px'} type="submit">
+                  Save
+                </Button>
+              ) : (
+                <Button
+                  isDisabled
+                  colorScheme={'teal'}
+                  ml={'10px'}
+                  type="submit"
+                >
+                  Save
+                </Button>
+              )}
+            </ModalFooter>
+          </form>
         </ModalContent>
       </Modal>
     </>

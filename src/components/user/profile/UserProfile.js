@@ -5,8 +5,6 @@ import {
   Image,
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
   Input,
   Button,
   useToast,
@@ -44,7 +42,9 @@ const UserProfile = () => {
     <>
       <Container maxW={'900px'} mt={'50px'}>
         <Grid
-          bgColor={'blackAlpha.50'}
+          border={'black'}
+          borderRadius={'30px'}
+          bgColor={'teal.50'}
           h="500px"
           templateRows="repeat(2, 1fr)"
           templateColumns="repeat(3, 1fr)"
@@ -57,6 +57,8 @@ const UserProfile = () => {
             colSpan={1}
           >
             <Image
+              ml={'100px'}
+              mt={'100px'}
               borderRadius="full"
               boxSize="180px"
               src="https://bit.ly/dan-abramov"
@@ -64,12 +66,19 @@ const UserProfile = () => {
             />
           </GridItem>
 
-          <GridItem rowSpan={2} colSpan={2} mt={'30px'} maxW={'400px'}>
+          <GridItem
+            ml={'100px'}
+            rowSpan={2}
+            colSpan={2}
+            mt={'30px'}
+            maxW={'400px'}
+          >
             {editState ? (
               <form onSubmit={handleSubmit(onSubmit)}>
                 <FormControl mb={5}>
                   <FormLabel htmlFor="username">Username</FormLabel>
                   <Input
+                    bgColor={'white'}
                     id="username"
                     type="text"
                     defaultValue={user?.username}
@@ -79,6 +88,7 @@ const UserProfile = () => {
                 <FormControl mb={5}>
                   <FormLabel htmlFor="email">Email address</FormLabel>
                   <Input
+                    bgColor={'white'}
                     id="email"
                     type="email"
                     defaultValue={user?.email}
@@ -88,6 +98,7 @@ const UserProfile = () => {
                 <FormControl mb={5}>
                   <FormLabel htmlFor="firstname">First name</FormLabel>
                   <Input
+                    bgColor={'white'}
                     id="firstname"
                     type="text"
                     defaultValue={user?.name}
@@ -97,13 +108,14 @@ const UserProfile = () => {
                 <FormControl mb={10}>
                   <FormLabel htmlFor="lastname">Last name</FormLabel>
                   <Input
+                    bgColor={'white'}
                     id="lastname"
                     type="text"
                     defaultValue={user?.surname}
                     {...register('surname', { required: true })}
                   />
                 </FormControl>
-                <ChangePassword onSubmit={onSubmit} user={user} />
+                <ChangePassword user={user} />
                 <Button
                   mx={'10px'}
                   colorScheme="teal"
@@ -114,7 +126,7 @@ const UserProfile = () => {
                   Cancel
                 </Button>
                 <Button colorScheme="teal" type={'submit'}>
-                  Submit
+                  Save
                 </Button>
               </form>
             ) : (
@@ -122,6 +134,7 @@ const UserProfile = () => {
                 <FormControl mb={5}>
                   <FormLabel htmlFor="username">Username</FormLabel>
                   <Input
+                    bgColor="teal.50"
                     id="username"
                     type="text"
                     isReadOnly
@@ -174,8 +187,9 @@ const UserProfile = () => {
               </>
             )}
           </GridItem>
-          <GridItem justifySelf={'center'} rowSpan={1} colSpan={1}>
-            <Button>Change profile picture</Button>
+
+          <GridItem ml={'100px'} justifySelf={'center'} rowSpan={1} colSpan={1}>
+            <Button colorScheme={'teal'}>Change profile picture</Button>
           </GridItem>
         </Grid>
       </Container>
