@@ -48,7 +48,7 @@ const SignUp = () => {
   } = useForm(formOptions);
 
   const onSubmit = async data => {
-    const resp = await Axios.post('Users/register', data);
+    const resp = await Axios.post('auth/register', data);
     if (resp.status === 200) {
       toast({
         title: 'Account created.',
@@ -79,7 +79,12 @@ const SignUp = () => {
       </Button>
       <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
         <ModalOverlay />
-        <ModalContent h={650} bgColor="blackAlpha.800" textColor="white">
+        <ModalContent
+          maxH={'1000px'}
+          maxW={'600px'}
+          bgColor="blackAlpha.800"
+          textColor="white"
+        >
           <form onSubmit={handleSubmit(onSubmit)}>
             <ModalHeader
               bgColor="orange.400"
@@ -102,7 +107,7 @@ const SignUp = () => {
                       borderColor="blackAlpha.500"
                       fontSize="xl"
                       h={50}
-                      {...register('name', { required: true })}
+                      {...register('emer', { required: true })}
                     />
                   </FormControl>
 
@@ -114,89 +119,138 @@ const SignUp = () => {
                       borderColor="blackAlpha.500"
                       fontSize="xl"
                       h={50}
-                      {...register('surname', { required: true })}
+                      {...register('mbiemer', { required: true })}
                     />
                   </FormControl>
                 </HStack>
-                <FormControl id="username" mb={10} isRequired>
+                <HStack mb={10}>
+                  <FormControl id="fatherhood" isRequired>
+                    <Input
+                      type="text"
+                      placeholder="Fatherhood"
+                      bgColor="whiteAlpha.300"
+                      borderColor="blackAlpha.500"
+                      fontSize="xl"
+                      h={50}
+                      {...register('atesia', { required: true })}
+                    />
+                  </FormControl>
+                  <FormControl id="username" isRequired>
+                    <Input
+                      type="text"
+                      placeholder="Username"
+                      bgColor="whiteAlpha.300"
+                      borderColor="blackAlpha.500"
+                      fontSize="xl"
+                      h={50}
+                      {...register('username', { required: true })}
+                    />
+                  </FormControl>
+                </HStack>
+                <HStack mb={10}>
+                  <FormControl id="email" isRequired>
+                    <Input
+                      type="email"
+                      placeholder="Email"
+                      bgColor="whiteAlpha.300"
+                      borderColor="blackAlpha.500"
+                      fontSize="xl"
+                      h={50}
+                      {...register('email', { required: true })}
+                    />
+                  </FormControl>
+                  <FormControl id="nr_Tel" isRequired>
+                    <Input
+                      type="text"
+                      placeholder="Nr tel"
+                      bgColor="whiteAlpha.300"
+                      borderColor="blackAlpha.500"
+                      fontSize="xl"
+                      h={50}
+                      {...register('nr_Tel', { required: true })}
+                    />
+                  </FormControl>
+                </HStack>
+                <FormControl id="role" mb={10} isRequired>
                   <Input
                     type="text"
-                    placeholder="Username"
+                    placeholder="Role"
                     bgColor="whiteAlpha.300"
                     borderColor="blackAlpha.500"
                     fontSize="xl"
                     h={50}
-                    {...register('username', { required: true })}
+                    {...register('roli', { required: true })}
                   />
                 </FormControl>
-                <FormControl id="email" mb={10} isRequired>
+                <FormControl id="datelindja" mb={10} isRequired>
                   <Input
-                    type="email"
-                    placeholder="Email"
+                    type="date"
+                    placeholder="Datelindja"
                     bgColor="whiteAlpha.300"
                     borderColor="blackAlpha.500"
                     fontSize="xl"
                     h={50}
-                    {...register('email', { required: true })}
+                    {...register('datelindja', { required: true })}
                   />
                 </FormControl>
+                <HStack mb={10}>
+                  <FormControl id="password">
+                    <InputGroup>
+                      <Input
+                        placeholder="Password"
+                        type={showPassword ? 'text' : 'password'}
+                        bgColor="whiteAlpha.300"
+                        borderColor="blackAlpha.500"
+                        fontSize="xl"
+                        h={50}
+                        {...register('password')}
+                      />
 
-                <FormControl id="password" mb={10}>
-                  <InputGroup>
-                    <Input
-                      placeholder="Password"
-                      type={showPassword ? 'text' : 'password'}
-                      bgColor="whiteAlpha.300"
-                      borderColor="blackAlpha.500"
-                      fontSize="xl"
-                      h={50}
-                      {...register('password')}
-                    />
+                      <InputRightElement h={'full'}>
+                        <Button
+                          _hover={{ bg: 'orange.600' }}
+                          variant={'ghost'}
+                          onClick={() =>
+                            setShowPassword(showPassword => !showPassword)
+                          }
+                        >
+                          {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                        </Button>
+                      </InputRightElement>
+                    </InputGroup>
+                    <FormHelperText color={'red.400'}>
+                      {errors.password?.message}
+                    </FormHelperText>
+                  </FormControl>
+                  <FormControl id="confirmPassword">
+                    <InputGroup>
+                      <Input
+                        placeholder="Confirm Password"
+                        type={showPassword ? 'text' : 'password'}
+                        bgColor="whiteAlpha.300"
+                        borderColor="blackAlpha.500"
+                        fontSize="xl"
+                        h={50}
+                        {...register('confirmPassword')}
+                      />
 
-                    <InputRightElement h={'full'}>
-                      <Button
-                        _hover={{ bg: 'orange.600' }}
-                        variant={'ghost'}
-                        onClick={() =>
-                          setShowPassword(showPassword => !showPassword)
-                        }
-                      >
-                        {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                      </Button>
-                    </InputRightElement>
-                  </InputGroup>
-                  <FormHelperText color={'red.400'}>
-                    {errors.password?.message}
-                  </FormHelperText>
-                </FormControl>
-                <FormControl id="confirmPassword">
-                  <InputGroup>
-                    <Input
-                      placeholder="Confirm Password"
-                      type={showPassword ? 'text' : 'password'}
-                      bgColor="whiteAlpha.300"
-                      borderColor="blackAlpha.500"
-                      fontSize="xl"
-                      h={50}
-                      {...register('confirmPassword')}
-                    />
-
-                    <InputRightElement h={'full'}>
-                      <Button
-                        _hover={{ bg: 'orange.600' }}
-                        variant={'ghost'}
-                        onClick={() =>
-                          setShowPassword(showPassword => !showPassword)
-                        }
-                      >
-                        {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                      </Button>
-                    </InputRightElement>
-                  </InputGroup>
-                  <FormHelperText color={'red.400'}>
-                    {errors.confirmPassword?.message}
-                  </FormHelperText>
-                </FormControl>
+                      <InputRightElement h={'full'}>
+                        <Button
+                          _hover={{ bg: 'orange.600' }}
+                          variant={'ghost'}
+                          onClick={() =>
+                            setShowPassword(showPassword => !showPassword)
+                          }
+                        >
+                          {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                        </Button>
+                      </InputRightElement>
+                    </InputGroup>
+                    <FormHelperText color={'red.400'}>
+                      {errors.confirmPassword?.message}
+                    </FormHelperText>
+                  </FormControl>
+                </HStack>
               </FormControl>
             </ModalBody>
             <ModalFooter>

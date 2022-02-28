@@ -3,7 +3,7 @@ import TokenManager from '../helpers/TokenManager';
 
 const Axios = () => {
   const axiosInstance = axios.create({
-    baseURL: 'https://localhost:44353/api/',
+    baseURL: 'http://localhost:48830/api/',
   });
   axiosInstance.interceptors.request.use(async request => {
     const jwt = TokenManager.getToken();

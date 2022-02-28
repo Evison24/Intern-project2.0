@@ -30,7 +30,6 @@ const ProductsChart = () => {
       }
       let groupedByProdId = _.groupBy(data, 'productId');
       let groupedByProdIdArray = _.values(groupedByProdId);
-      console.log(groupedByProdIdArray);
       chartData = groupedByProdIdArray.map(currVal => {
         return {
           title: titleVal(currVal[0].productId),

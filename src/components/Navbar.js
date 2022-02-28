@@ -42,24 +42,24 @@ const Navbar = () => {
             </Box>
 
             <Spacer />
-            {user?.isAdmin === false && <Cart />}
+            {user?.roli !== 'Admin' && <Cart />}
             <Box>
               {!user && <SignUp />}
-              {user?.isAdmin === false ? (
+              {user?.roli !== 'Admin' ? (
                 <Button ml={5} colorScheme={'orange'}>
                   <NavLink to={'/user-chart'}>User Chart</NavLink>
                 </Button>
               ) : (
                 ' '
               )}
-              {user?.isAdmin === false ? (
+              {user?.roli !== 'Admin' ? (
                 <Button ml={5} colorScheme={'orange'}>
                   <NavLink to={'/my-profile'}>My profile</NavLink>
                 </Button>
               ) : (
                 ' '
               )}
-              {user?.isAdmin ? (
+              {user?.roli === 'Admin' ? (
                 <Button ml={5} colorScheme={'orange'}>
                   <NavLink to={'/all-users-chart'}>All users XYChart</NavLink>
                 </Button>

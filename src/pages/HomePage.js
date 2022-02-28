@@ -5,7 +5,7 @@ import UserPage from './UserPage';
 const HomePage = () => {
   const user = useGetUser();
 
-  return <>{user.isAdmin ? <AdminPage /> : <UserPage />}</>;
+  return <>{user?.roli === 'Admin' ? <AdminPage /> : <UserPage />}</>;
 };
 
 export default HomePage;

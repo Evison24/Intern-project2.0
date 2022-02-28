@@ -16,9 +16,9 @@ import {
   InputRightElement,
   InputLeftElement,
 } from '@chakra-ui/react';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import { ViewIcon, ViewOffIcon, AtSignIcon } from '@chakra-ui/icons';
 
-import { HiOutlineKey, FiUser, BiLockAlt } from 'react-icons/all';
+import { HiOutlineKey, BiLockAlt } from 'react-icons/all';
 import { useState } from 'react';
 import Axios from '../utils/axios/Axios';
 import { useDispatch } from 'react-redux';
@@ -34,7 +34,7 @@ const Login = () => {
   let user = useGetUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showPassword, setShowPassword] = useState(false);
-  const [username, setUsername] = useState(null);
+  const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [message, setMessage] = useState(null);
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ const Login = () => {
 
   const onLoginButtonClick = async () => {
     try {
-      const res = await Axios.post('Users/login', { username, password });
+      const res = await Axios.post('auth/login', { email, password });
       if (res.status === 200) {
         dispatch(onUserLogin(res.data.user));
         TokenManager.setToken(res.data.token);
@@ -50,7 +50,7 @@ const Login = () => {
         onClose();
       }
     } catch {
-      setMessage('Username or password is incorrect !');
+      setMessage('Email or password is incorrect !');
       setTimeout(() => {
         setMessage(null);
       }, 5000);
@@ -59,7 +59,7 @@ const Login = () => {
 
   const onLogout = () => {
     dispatch(onUserLogout());
-    setUsername(null);
+    setEmail(null);
     setPassword(null);
     setMessage(null);
   };
@@ -99,16 +99,16 @@ const Login = () => {
           <ModalBody mx={10} mt={5}>
             <FormControl>
               <InputGroup mt={35}>
-                <InputLeftElement h={'full'} fontSize={25}>
-                  <Icon as={FiUser} />
+                <InputLeftElement h={'full'} fontSize={23}>
+                  <Icon as={AtSignIcon} />
                 </InputLeftElement>
                 <Input
-                  onChange={e => setUsername(e.target.value)}
+                  onChange={e => setEmail(e.target.value)}
                   bgColor={'whiteAlpha.300'}
-                  placeholder={'Username'}
+                  placeholder={'Email'}
                   borderColor={'blackAlpha.500'}
-                  id={'username'}
-                  type={'text'}
+                  id={'email'}
+                  type={'email'}
                   fontSize={'xl'}
                   h={50}
                 />
