@@ -1,12 +1,11 @@
 import { Container } from '@chakra-ui/react';
-
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import Axios from '../utils/axios/Axios';
 import DataTable from '../components/admin/DataTable';
+import { COLUMNS } from '../components/admin/Columns';
 
 const AdminPage = () => {
-  const [data, setData] = useState(null);
-  const [cols, setCols] = useState(null);
+  let dataArray = [];
 
   useEffect(() => {
     const fetch = async () => {
@@ -14,31 +13,22 @@ const AdminPage = () => {
         pageNumber: 1,
         pageSize: 10,
       });
-      console.log(resp.data.columns);
-      // console.log(resp.data.columns[1].accessor);
-      setCols(resp.data.columns);
+      console.log(resp.data.data.data);
+      for (let i = 0; i < resp.data.data.data.length; i++) {
+        dataArray.push(resp.data.data.data[i]);
+      }
     };
     fetch();
   }, []);
 
-  const columns = useMemo(
-    () => [
-      {
-        columns: [
-          {
-            Header: cols?.Header[1],
-            accessor: cols?.accessor[1],
-          },
-        ],
-      },
-    ],
-    []
-  );
+  const columns = useMemo(() => COLUMNS, []);
+  const data = useMemo(() => dataArray, []);
+  console.log(dataArray);
 
   return (
     <>
-      <Container maxW={1500} mb={20}>
-        <DataTable columns={columns} />
+      <Container maxW={1500} mt={'30px'}>
+        <DataTable columns={columns} data={data} />
       </Container>
     </>
   );
