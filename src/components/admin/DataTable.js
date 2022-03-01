@@ -1,4 +1,4 @@
-import { Table, Thead, Tbody, Tr, Th, Td, Flex } from '@chakra-ui/react';
+import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 import { useTable, useSortBy } from 'react-table';
 import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
 
@@ -6,48 +6,47 @@ const DataTable = ({ columns, data }) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable(
       {
-        columns,
-        data,
+        columns: columns,
+        data: data,
       },
       useSortBy
     );
 
-  const firstPageRows = rows.slice(0, 20);
-
   return (
     <>
-      {' '}
-      <Table {...getTableProps()}>
-        <Thead>
+      <Table
+        {...getTableProps()}
+        borderRadius={'20px'}
+        overflow={'hidden'}
+        bgColor={'blackAlpha.200'}
+        colorScheme={'blackAlpha'}
+      >
+        <Thead bgColor={'orange.400'}>
           {headerGroups.map(headerGroup => (
             <Tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
-                // Add the sorting props to control sorting. For this example
-                // we can add them into the header props
                 <Th
                   userSelect="none"
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                 >
-                  <Flex alignItems="center">
-                    {column.render('Header')}
-                    {/* Add a sort direction indicator */}
-                    {column.isSorted ? (
-                      column.isSortedDesc ? (
-                        <TriangleDownIcon ml={1} w={4} h={4} />
-                      ) : (
-                        <TriangleUpIcon ml={1} w={4} h={4} />
-                      )
+                  {column.render('Header')}
+                  {column.isSorted ? (
+                    column.isSortedDesc ? (
+                      <TriangleDownIcon ml={1} w={4} h={4} />
                     ) : (
-                      ''
-                    )}
-                  </Flex>
+                      <TriangleUpIcon ml={1} w={4} h={4} />
+                    )
+                  ) : (
+                    ''
+                  )}
                 </Th>
               ))}
             </Tr>
           ))}
+          {/* */}
         </Thead>
         <Tbody {...getTableBodyProps()}>
-          {firstPageRows.map((row, i) => {
+          {rows.map(row => {
             prepareRow(row);
             return (
               <Tr {...row.getRowProps()}>
