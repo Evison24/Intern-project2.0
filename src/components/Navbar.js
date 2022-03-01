@@ -37,29 +37,29 @@ const Navbar = () => {
             </Box>
             <Box>
               <NavLink to={user ? '/' : '/landing'}>
-                <Image src={weshoplogo} h={100} my={-25} />
+                <Image draggable={'false'} src={weshoplogo} h={100} my={-25} />
               </NavLink>
             </Box>
 
             <Spacer />
-            {user?.roli !== 'Admin' && <Cart />}
+            {user && user?.roli !== 'Admin' && <Cart />}
             <Box>
               {!user && <SignUp />}
-              {user?.roli !== 'Admin' ? (
+              {user && user?.roli !== 'Admin' ? (
                 <Button ml={5} colorScheme={'orange'}>
                   <NavLink to={'/user-chart'}>User Chart</NavLink>
                 </Button>
               ) : (
                 ' '
               )}
-              {user?.roli !== 'Admin' ? (
+              {user && user?.roli !== 'Admin' ? (
                 <Button ml={5} colorScheme={'orange'}>
                   <NavLink to={'/my-profile'}>My profile</NavLink>
                 </Button>
               ) : (
                 ' '
               )}
-              {user?.roli === 'Admin' ? (
+              {user && user?.roli === 'Admin' ? (
                 <Button ml={5} colorScheme={'orange'}>
                   <NavLink to={'/all-users-chart'}>All users XYChart</NavLink>
                 </Button>
